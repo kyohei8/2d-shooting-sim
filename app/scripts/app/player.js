@@ -6,9 +6,9 @@ class Player{
   constructor(x, y, w, h){
     this.location = new PVector(x, y);
     this.velocity = new PVector();
-    this.acceleration = new PVector(0.01, 0.1);
-    this.topSpeed = 10;
-    this.mass = 10;
+    this.acceleration = new PVector(0, 0);
+    this.topSpeed = 5;
+    this.mass = 1;
     this.width = w;
     this.height = h;
     this.shape = this._createSpahe();
@@ -23,13 +23,23 @@ class Player{
 
   applyForce(force){
     const f = PVector.div(force, this.mass);
-    this.acceleration = f;
+    // const f = PVector.mult(force, 5);
+    this.acceleration.add(f);
+  }
+
+  addFriction(){
+    const friction = this.velocity.get();
+    friction.mult(-1);
+    friction.normalize();
+    friction.mult(0.05);
+    this.applyForce(friction);
   }
 
   update(){
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.topSpeed);
     this.location.add(this.velocity);
+    this.velocity.mult(0.8);
     this.acceleration.mult(0);
   }
 
@@ -50,6 +60,7 @@ class Player{
   }
 
   display(){
+    this.addFriction();
     this.update();
     this.checkEdge();
     const { location } = this;
