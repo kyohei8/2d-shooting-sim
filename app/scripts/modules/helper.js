@@ -14,3 +14,7 @@ Math.getRadian = (degrees) => {
 Math.lerp = (value1, value2, amt) => {
   return ((value2 - value1) * amt) + value1;
 };
+
+window.randomColor = () => {
+  return `0x${Math.random().toString(16).slice(2,8)}`;
+}

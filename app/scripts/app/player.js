@@ -7,7 +7,7 @@ class Player{
     this.location = new PVector(x, y);
     this.velocity = new PVector();
     this.acceleration = new PVector(0, 0);
-    this.topSpeed = 5;
+    this.topSpeed = 4;
     this.mass = 1;
     this.width = w;
     this.height = h;
@@ -18,6 +18,7 @@ class Player{
   _createSpahe(){
     const shape = new PIXI.Graphics();
     shape.lineStyle(1, 0x110022).beginFill(0, 0).drawRect(0, 0, 10, 10).endFill();
+    shape.anchor = 0.5;
     return shape;
   }
 
@@ -31,7 +32,7 @@ class Player{
     const friction = this.velocity.get();
     friction.mult(-1);
     friction.normalize();
-    friction.mult(0.05);
+    friction.mult(0.01);
     this.applyForce(friction);
   }
 
