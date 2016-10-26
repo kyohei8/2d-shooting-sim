@@ -3,24 +3,18 @@ import PixiRenderer from '../modules/pixiRenderer.js';
 import PVector from '../modules/pVector';
 import Gamepad from './pad';
 import Player from './player';
-import Shot from './shot';
 
 const renderer = new PixiRenderer();
 const { width, height } = renderer.renderer;
 
 const pad = new Gamepad();
 const direction = {};
-const shots = [];
 
-const player = new Player(width / 2, height * 0.9, width, height);
-renderer.addChild(player.shape);
+const player = new Player(renderer, width / 2, height * 0.9, width, height);
 
 const setPadEvent = () => {
   pad.on(pad.buttonEvent.button3.press, () => {
-    // console.log('press');
-    const { x, y } = player.location;
-    const shot = new Shot(renderer, x + 5, y + 5);
-    shots.push(shot);
+    player.shot();
   });
 
   pad.on(pad.buttonEvent.button3.hold, () => {
@@ -73,13 +67,4 @@ renderer.draw(() => {
   player.display();
   direction.x = 0;
   direction.y = 0;
-
-  for (var i = shots.length - 1; i >= 0; i--) {
-    const s = shots[i];
-    s.run();
-    if(s.isDead()){
-      s.destroy();
-      shots.splice(i, 1);
-    }
-  }
 });

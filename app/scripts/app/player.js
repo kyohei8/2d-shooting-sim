@@ -1,9 +1,11 @@
 import PVector from '../modules/pVector';
+import Shot from './shot';
 /**
  * Player
  */
 class Player{
-  constructor(x, y, w, h){
+  constructor(renderer, x, y, w, h){
+    this.renderer = renderer;
     this.location = new PVector(x, y);
     this.velocity = new PVector();
     this.acceleration = new PVector(0, 0);
@@ -11,7 +13,9 @@ class Player{
     this.mass = 1;
     this.width = w;
     this.height = h;
+    this.shots = [];
     this.shape = this._createSpahe();
+    this.renderer.addChild(this.shape);
     this.shape.position.set(this.location.x, this.location.y);
   }
 
@@ -20,6 +24,12 @@ class Player{
     shape.lineStyle(1, 0x110022).beginFill(0, 0).drawRect(0, 0, 10, 10).endFill();
     shape.anchor = 0.5;
     return shape;
+  }
+
+  shot(){
+    const { x, y } = this.location;
+    const shot = new Shot(this.renderer, x + 5, y + 5);
+    this.shots.push(shot);
   }
 
   applyForce(force){
@@ -66,6 +76,16 @@ class Player{
     this.checkEdge();
     const { location } = this;
     this.shape.position.set(location.x, location.y);
+
+    // display shot
+    for (var i = this.shots.length - 1; i >= 0; i--) {
+      const s = this.shots[i];
+      s.run();
+      if(s.isDead()){
+        s.destroy();
+        this.shots.splice(i, 1);
+      }
+    }
   }
 }
 
