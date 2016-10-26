@@ -3,10 +3,11 @@ import PVector from '../modules/pVector';
  * Shot
  */
 class Shot{
-  constructor(renderer, x, y){
+  constructor(renderer, x, y, vx = 0, vy = -15){
     this.renderer = renderer;
     this.location = new PVector(x, y);
-    this.velocity = new PVector(0, -15);
+    // this.velocity = new PVector(0, -15);
+    this.velocity = new PVector(vx, vy);
     // this.acceleration = new PVector(0, -5);
     this.topSpeed = 4;
     this.mass = 1;

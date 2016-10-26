@@ -40,6 +40,14 @@ class Player{
     this.shots.push(shot2);
   }
 
+  shot2way(){
+    const { x, y } = this.location;
+    const shot1 = new Shot(this.renderer, x, y + 5, -1);
+    const shot2 = new Shot(this.renderer, x + 10, y + 5, 1);
+    this.shots.push(shot1);
+    this.shots.push(shot2);
+  }
+
   applyForce(force){
     const f = PVector.div(force, this.mass);
     // const f = PVector.mult(force, 5);
