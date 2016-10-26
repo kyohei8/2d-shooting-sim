@@ -1,5 +1,10 @@
 import PVector from '../modules/pVector';
 import Shot from './shot';
+const SHOT_MODE = [
+  'NORMAL',
+  'DOUBLE',
+  'TWO_WAY'
+];
 /**
  * Player
  */
@@ -14,6 +19,8 @@ class Player{
     this.width = w;
     this.height = h;
     this.shots = [];
+    this.shotModeCnt = 0;
+    this.shotMode = SHOT_MODE[this.shotModeCnt];
     this.shape = this._createSpahe();
     this.renderer.addChild(this.shape);
     this.shape.position.set(this.location.x, this.location.y);
@@ -26,7 +33,27 @@ class Player{
     return shape;
   }
 
+  changeShotMode(){
+    this.shotModeCnt++;
+    this.shotMode = SHOT_MODE[this.shotModeCnt % 3];
+  }
+
   shot(){
+    switch(this.shotMode){
+      case 'NORMAL':
+        this.shotSingle();
+        break;
+      case 'DOUBLE':
+        this.shotDouble();
+        break;
+      case 'TWO_WAY':
+        this.shot2way();
+        break;
+      default:
+    }
+  }
+
+  shotSingle(){
     const { x, y } = this.location;
     const shot = new Shot(this.renderer, x + 5, y + 5);
     this.shots.push(shot);

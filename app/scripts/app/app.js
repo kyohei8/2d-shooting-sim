@@ -55,7 +55,10 @@ document.addEventListener('keydown', (event) => {
       direction.y = 1;
       break;
     case ' ':
-      player.shotDouble();
+      player.shot();
+      break;
+    case 'z':
+      player.changeShotMode();
       break;
     default:
   }
