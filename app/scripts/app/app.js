@@ -54,6 +54,9 @@ document.addEventListener('keydown', (event) => {
     case 'ArrowDown':
       direction.y = 1;
       break;
+    case ' ':
+      player.shot();
+      break;
     default:
   }
 });
