@@ -75,6 +75,10 @@ class Player{
     this.shots.push(shot2);
   }
 
+  moveTo(x,y){
+    this.applyForce(new PVector(x, y));
+  }
+
   applyForce(force){
     const f = PVector.div(force, this.mass);
     // const f = PVector.mult(force, 5);
