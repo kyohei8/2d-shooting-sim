@@ -1,10 +1,11 @@
 import PVector from '../modules/pVector';
-import Shot from './shot';
+import Bullet from './bullet';
 const SHOT_MODE = [
   'NORMAL',
   'DOUBLE',
   'TWO_WAY'
 ];
+
 /**
  * Player
  */
@@ -55,22 +56,22 @@ class Player{
 
   shotSingle(){
     const { x, y } = this.location;
-    const shot = new Shot(this.renderer, x + 5, y + 5);
+    const shot = new Bullet(this.renderer, x + 5, y + 5);
     this.shots.push(shot);
   }
 
   shotDouble(){
     const { x, y } = this.location;
-    const shot1 = new Shot(this.renderer, x, y + 5);
-    const shot2 = new Shot(this.renderer, x + 10, y + 5);
+    const shot1 = new Bullet(this.renderer, x, y + 5);
+    const shot2 = new Bullet(this.renderer, x + 10, y + 5);
     this.shots.push(shot1);
     this.shots.push(shot2);
   }
 
   shot2way(){
     const { x, y } = this.location;
-    const shot1 = new Shot(this.renderer, x, y + 5, -1);
-    const shot2 = new Shot(this.renderer, x + 10, y + 5, 1);
+    const shot1 = new Bullet(this.renderer, x, y + 5, -1);
+    const shot2 = new Bullet(this.renderer, x + 10, y + 5, 1);
     this.shots.push(shot1);
     this.shots.push(shot2);
   }

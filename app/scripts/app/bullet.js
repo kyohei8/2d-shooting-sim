@@ -1,8 +1,8 @@
 import PVector from '../modules/pVector';
 /**
- * Shot
+ * 弾
  */
-class Shot{
+class Bullet{
   constructor(renderer, x, y, vx = 0, vy = -15){
     this.renderer = renderer;
     this.location = new PVector(x, y);
@@ -16,6 +16,7 @@ class Shot{
     this._createSpahe();
     this.shape.position.set(this.location.x, this.location.y);
   }
+
   _createSpahe(){
     this.shape = new PIXI.Graphics();
     this.shape
@@ -73,4 +74,4 @@ class Shot{
   }
 }
 
-export default Shot;
+export default Bullet;
