@@ -3,6 +3,7 @@ import PixiRenderer from '../modules/pixiRenderer.js';
 import PVector from '../modules/pVector';
 import Gamepad from './pad';
 import Player from './player';
+import Button1Command from './command/button1Command';
 import Button3Command from './command/button3Command';
 import MoveCommand from './command/moveCommand';
 
@@ -14,13 +15,19 @@ const direction = {};
 
 const player = new Player(renderer, width / 2, height * 0.9, width, height);
 let command = null;
+let commands = [];
 
 const setPadEvent = () => {
+  pad.on(pad.buttonEvent.button1.press, () => {
+    commands.push(new Button1Command(player));
+  });
+
   pad.on(pad.buttonEvent.button3.press, () => {
-    command = new Button3Command(player);
+    commands.push(new Button3Command(player));
   });
 
   pad.on(pad.buttonEvent.button3.hold, () => {
+    commands.push(new Button3Command(player));
     // console.log('hold');
   });
 
@@ -29,11 +36,11 @@ const setPadEvent = () => {
   });
 
   pad.on(pad.axisEvent.axis0, (value) => {
-    command = new MoveCommand(player, value * 0.5, 0);
+    commands.push(new MoveCommand(player, value * 0.5, 0));
   });
 
   pad.on(pad.axisEvent.axis1, (value) => {
-    command = new MoveCommand(player, 0, value * 0.5);
+    commands.push(new MoveCommand(player, 0, value * 0.5));
   });
 };
 
@@ -61,7 +68,7 @@ document.addEventListener('keydown', (event) => {
       command = new Button3Command(player);
       break;
     case 'z':
-      player.changeShotMode();
+      command = new Button1Command(player);
       break;
     default:
   }
@@ -71,9 +78,11 @@ document.addEventListener('keydown', (event) => {
 
 
 renderer.draw(() => {
-  if(command){
-    command.execute();
-    command = null;
+  if(commands.length > 0){
+    commands.forEach((command) => {
+      command.execute();
+    });
+    commands = [];
   }
   player.display();
 });

@@ -3,7 +3,8 @@ import Bullet from './bullet';
 const SHOT_MODE = [
   'NORMAL',
   'DOUBLE',
-  'TWO_WAY'
+  'TWO_WAY',
+  'THREE_WAY'
 ];
 
 /**
@@ -21,6 +22,8 @@ class Player{
     this.height = h;
     this.shots = [];
     this.shotModeCnt = 0;
+    this.size = 10
+
     this.shotMode = SHOT_MODE[this.shotModeCnt];
     this.shape = this._createSpahe();
     this.renderer.addChild(this.shape);
@@ -29,14 +32,20 @@ class Player{
 
   _createSpahe(){
     const shape = new PIXI.Graphics();
-    shape.lineStyle(1, 0x110022).beginFill(0, 0).drawRect(0, 0, 10, 10).endFill();
+    const { size } = this;
+    // locationが中央になるようにする
+    shape
+      .lineStyle(1, 0x110022)
+      .beginFill(0, 0)
+      .drawRect(-size / 2, -size / 2, this.size, this.size)
+      .endFill();
     shape.anchor = 0.5;
     return shape;
   }
 
   changeShotMode(){
     this.shotModeCnt++;
-    this.shotMode = SHOT_MODE[this.shotModeCnt % 3];
+    this.shotMode = SHOT_MODE[this.shotModeCnt % SHOT_MODE.length];
   }
 
   shot(){
@@ -50,19 +59,22 @@ class Player{
       case 'TWO_WAY':
         this.shot2way();
         break;
+      case 'THREE_WAY':
+        this.shot3way();
+        break;
       default:
     }
   }
 
   shotSingle(){
     const { x, y } = this.location;
-    const shot = new Bullet(this.renderer, x + 5, y + 5);
+    const shot = new Bullet(this.renderer, x, y + 5);
     this.shots.push(shot);
   }
 
   shotDouble(){
     const { x, y } = this.location;
-    const shot1 = new Bullet(this.renderer, x, y + 5);
+    const shot1 = new Bullet(this.renderer, x - 10, y + 5);
     const shot2 = new Bullet(this.renderer, x + 10, y + 5);
     this.shots.push(shot1);
     this.shots.push(shot2);
@@ -71,9 +83,19 @@ class Player{
   shot2way(){
     const { x, y } = this.location;
     const shot1 = new Bullet(this.renderer, x, y + 5, -1);
-    const shot2 = new Bullet(this.renderer, x + 10, y + 5, 1);
+    const shot2 = new Bullet(this.renderer, x, y + 5, 1);
     this.shots.push(shot1);
     this.shots.push(shot2);
+  }
+
+  shot3way(){
+    const { x, y } = this.location;
+    const shot1 = new Bullet(this.renderer, x, y + 5, -1);
+    const shot2 = new Bullet(this.renderer, x, y + 5, 0);
+    const shot3 = new Bullet(this.renderer, x, y + 5, 1);
+    this.shots.push(shot1);
+    this.shots.push(shot2);
+    this.shots.push(shot3);
   }
 
   moveTo(x,y){
@@ -105,16 +127,16 @@ class Player{
   checkEdge(){
     const { location, width, height } = this;
     const { x, y } = location;
-    if(x > width){
-      location.x = 0;
+    if(x > width - this.size){
+      location.x = width - this.size;
     }else if(x < 0){
-      location.x = width;
+      location.x = 0;
     }
 
-    if(y > height){
-      location.y = 0;
+    if(y > height - this.size){
+      location.y = height - this.size;
     }else if(y < 0){
-      location.y = height;
+      location.y = 0;
     }
   }
 
